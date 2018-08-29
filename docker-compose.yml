@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  application:
+    ports:
+      - 80:3000
+    environment:
+      APP_DEBUG: 'false'
+      APP_ENV: 'production'
+    build:
+      context: ./
+      dockerfile: production.Dockerfile
+
+
