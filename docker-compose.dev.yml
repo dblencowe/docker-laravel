@@ -22,7 +22,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./:/app
+      - ./:/var/www
 
 volumes:
   mysql:
