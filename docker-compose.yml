@@ -1,22 +1,22 @@
 version: '3'
 
 services:
-  mariadb:
-    image: 'bitnami/mysql:latest'
+  database:
+    image: 'mysql:5.7'
     environment:
       - MYSQL_USER=$DB_USERNAME
       - MYSQL_DATABASE=$DB_DATABASE
       - MYSQL_PASSWORD=$DB_PASSWORD
       - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
     volumes:
-      - mysql:/bitnami
+      - mysql:/var/lib/mysql
     ports:
       - 3306:3306
   application:
     depends_on:
-      - mariadb
+      - database
     environment:
-      DB_HOST: 'mariadb'
+      DB_HOST: 'database'
       APP_DEBUG: 'true'
       APP_ENV: 'development'
     ports:
