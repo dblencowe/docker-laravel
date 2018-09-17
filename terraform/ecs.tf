@@ -1,11 +1,11 @@
 # ecs.tf
 
 resource "aws_ecs_cluster" "main" {
-  name = "gdpr-api-cluster"
+  name = "${var.app_name}-cluster"
 }
 
-data "template_file" "gdpr_api_app" {
-  template = "${file("terraform/templates/ecs/gdpr_api.json.tpl")}"
+data "template_file" "app" {
+  template = "${file("terraform/templates/ecs/app.json.tpl")}"
 
   vars {
     app_image      = "${var.app_image}"
@@ -17,7 +17,7 @@ data "template_file" "gdpr_api_app" {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = "gdpr-api-app-task"
+  family                   = "${var.app_name}-app-task"
   execution_role_arn       = "${var.ecs_task_execution_role}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "app" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "gdpr-api-service"
+  name            = "${var.app_name}-service"
   cluster         = "${aws_ecs_cluster.main.id}"
   task_definition = "${aws_ecs_task_definition.app.arn}"
   desired_count   = "${var.app_count}"
@@ -41,7 +41,7 @@ resource "aws_ecs_service" "main" {
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.app.id}"
-    container_name   = "gdpr-api-app"
+    container_name   = "${var.app_name}-app"
     container_port   = "${var.app_port}"
   }
 

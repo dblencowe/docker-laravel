@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "state.qa.closeit.co.uk"
-    key = "gdpr-api"
-    region = "eu-west-1"
+    bucket = "${var.state_bucket}"
+    key = "${var.app_name}"
+    region = "${var.aws_region}"
   }
 }
 
